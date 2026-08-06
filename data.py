@@ -28,7 +28,7 @@ Locations = {
         "Base": {
             "desc": "You are at the central base... In the distance, you can hear the creaking of the woods. You are directed to your quarters, but have the choice to look around...",
             "options": {
-                "Got to quarters": "Quarters",
+                "Go to quarters": "Quarters",
                 "Explore base": "basePlaces",
             },
         },
@@ -36,8 +36,8 @@ Locations = {
             "desc": "You arrived at quarters and you meet two roommates. Their names are Sam and Veronica...",
             "options": {
                 "Stay at quarters": "quarterBed",
-                "Talk to Sam": "Sam",  # TODO: CONVO
-                "Talk to Veronica": "Veronica",  # TODO: CONVO
+                "Talk to Sam": ["Sam", "person"],  # TODO: CONVO
+                "Talk to Veronica": ["Veronica", "person"],  # TODO: CONVO
                 "Go outside to base": "Base",
             },
         },

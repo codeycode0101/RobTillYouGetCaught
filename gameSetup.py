@@ -98,17 +98,21 @@ def checkExistingAccount():
 def newAccount():
 
     Choice = imput("NAME | GUEST:", ("name", "guest"))
+    Player_name = "null"
     if Choice == "name":
         while True:
             Player_name = (
                 input(dia("Enter your name:", Colors.YELLOW, "ask")).strip().title()
             )
+
             if Player_name:
                 break
             dia("Name cannot be blank!", Colors.RED)
 
     elif Choice == "guest":
         playerData = openFile("player_data.json")
+        if not playerData:
+            playerData = {}
         i = 0
         while True:
             Player_name = f"Guest_{i:04d}"  # Formats as Guest_0000, Guest_0001, etc.
@@ -121,6 +125,7 @@ def newAccount():
     game_story(Story)
 
     Choice = imput("ACCEPT | REFUSE | QUIT", ("accept", "refuse", "quit"))
+    PLAYER = None
     if Choice == "accept":
         PLAYER = PlayerSetup(Choice, Player_name)
     elif Choice == "refuse":

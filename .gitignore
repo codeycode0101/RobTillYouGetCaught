@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.pyo
+*.pdb
+*.log
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local game data
+player_data.json
+
+# Editor settings
+.vscode/
+.idea/

@@ -6,7 +6,6 @@ from data import Locations
 from colors import Colors
 from fileUtils import openFile
 
-
 """
 JSON file format:
 
@@ -24,6 +23,23 @@ JSON file format:
 """
 
 
+def Setup():
+    global PLAYER, lpath
+    PLAYER = getActivePlayer()
+    if PLAYER is None:
+        dia("No active player found. Please restart the game.", Colors.RED)
+        exit()
+    lpath = Locations[PLAYER.PATH]  # l --> location, path --> path
+
+
+def exitGame(Player):
+    # Save data | State: Exit | Update progress (KEY)
+    # Param: Player - The player Object of class is passed.
+    playerDataSave(Player, state="exit")
+    dia(f"Saving and exiting game...", Colors.GREEN)
+    exit()
+
+
 def ADMIN():
     """
     Allows the admin to change the player's location, inventory, or stats dynamically.
@@ -32,25 +48,33 @@ def ADMIN():
     global cloc
     dia("[ADMIN CONTROL ENABLED]", Colors.ORANGE)
 
+    if PLAYER is None:
+        dia("No active player found. Please restart the game.", Colors.RED)
+        exit()
+
     while True:
-        admin_commands = {
-            "changeloc()": "changeloc()",
-            "stats()": "stats()",
-            "exit()": "exit()",
-        }
+        dia("[ADMIN MODE]", Colors.PINK)
+        dia("Available commands:", Colors.BLUE)
+        dia("1. changeloc() - Change the player's current location.", Colors.YELLOW)
+        dia("2. stats() - Display the player's current stats.", Colors.YELLOW)
+        dia("3. exit() or quit() - Exit admin mode.", Colors.YELLOW)
         choice = input(">>> ").strip()
         match choice:
             case "changeloc()":
                 dia("[ALL LOCATIONS]", Colors.BLUE)
+                acceptLocations = Locations.get("accept")
+                if acceptLocations is None:
+                    dia("No locations found for the 'accept' path.", Colors.RED)
+                    continue
 
-                placesReal = list(Locations.get("accept").keys())
-                placesLower = [place.lower() for place in placesReal]
+                placesAll = list(acceptLocations.keys())
+                placesLower = [place.lower() for place in placesAll]
 
                 for place in placesLower:
-                    dia(f"- {place}", Colors.YELLOW)
+                    dia(f"- {place.title()}", Colors.YELLOW)
 
                 newLoc = imput("New Location: ", placesLower)
-                newLoc = placesReal[placesLower.index(newLoc)]
+                newLoc = placesAll[placesLower.index(newLoc)]
 
                 # Update cloc & progress
                 PLAYER.progress = cloc = newLoc
@@ -58,6 +82,7 @@ def ADMIN():
                 dia(f"[Location changed to {cloc}]", Colors.GREEN)
                 lineBreaker()
                 PLAYER.__stats__()
+                lineBreaker()
 
             case "stats()":
                 lineBreaker()
@@ -70,20 +95,6 @@ def ADMIN():
                 break
             case _:
                 dia("[INVALID COMMAND. TRY AGAIN.]", Colors.RED)
-
-
-def Setup():
-    global PLAYER, lpath
-    PLAYER = getActivePlayer()
-    lpath = Locations[PLAYER.PATH]  # l --> location, path --> path
-
-
-def exitGame(Player):
-    # Save data | State: Exit | Update progress (KEY)
-    # Param: Player - The player Object of class is passed.
-    playerDataSave(Player, state="exit")
-    dia(f"Saving and exiting game...", Colors.GREEN)
-    exit()
 
 
 def gameIntro():
@@ -109,11 +120,15 @@ def gameIntro():
 
 def gameLoop():
     # cloc = Current Location
-    # locProps = Location
+    # locProps = Location's properties (desc, options)
+    # lpath = Location Path
 
     global cloc, player
+    if PLAYER is None:
+        dia("No active player found. Please restart the game.", Colors.RED)
+        exit()
     prevLoc = cloc = "Truck" if not PLAYER.progress else PLAYER.progress
-
+    locProps = None
     while True:
 
         if isHash(cloc):
@@ -137,6 +152,7 @@ def gameLoop():
         twoToned("[Current Location]", cloc)
         dia(locProps["desc"])
         loptions = locProps["options"]
+        # loptions = Location Options
         option = handleOptions(loptions)
 
         # option = (index, choice ⭐)
@@ -149,7 +165,7 @@ def gameLoop():
             # Save previous location
             prevLoc = cloc
             # Find location of chosen option (OPTION: NEXT_LOCATION)
-            # Options= (Index, option 🔑)
+            # Options = (Index, option 🔑)
             cloc = loptions[option[-1]]
             if isinstance(cloc, (list, tuple)):
                 # For item/person: cloc = ["Next Location", "mode"]
@@ -173,9 +189,15 @@ def main():
     """
     Setup()
 
+    if PLAYER is None:
+        dia("No active player found. Please restart the game.", Colors.RED)
+        exit()
+
     if not PLAYER.progress:
         options = gameIntro()
         charData = openFile("characters.json")
+        if charData is None:
+            raise FileNotFoundError("characters.json not found")
         while True:
             options = handleOptions(options, "dialog")
             if options == "Exit":
@@ -185,7 +207,6 @@ def main():
                 lineBreaker()
                 gameLoop()
                 break
-
             options = charData["Frontman"][1]
 
     else:

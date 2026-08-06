@@ -19,12 +19,14 @@ def playerDataSave(PLAYER, state="join"):
     :return: None
     :rtype: None
     """
-    filename = "player_data.json"
 
     # Try to load existing player data, or start with an empty dictionary
     try:
-        playerData = openFile(filename)
+        playerData = openFile("player_data.json")
     except (FileNotFoundError, json.JSONDecodeError):
+        playerData = {}
+
+    if not playerData:
         playerData = {}
 
     # EXPECTS param: PLAYER - as Class Object
@@ -36,7 +38,7 @@ def playerDataSave(PLAYER, state="join"):
     playerData[PLAYER.username] = PLAYER.__toDict__()
 
     # Write updated data back to file
-    openFile(filename, "w", dump=playerData)
+    openFile("player_data.json", "w", dump=playerData)
 
 
 def playerDataLoad(type="login"):
@@ -72,6 +74,7 @@ def playerDataLoad(type="login"):
     choices = list(playerData.keys())
     # Make temp dictionary to store players and index
     playersDict = {}
+    index = 0
     for index, username in enumerate(choices, start=1):
         dia(f"{index}. {username}")
         playersDict[str(index)] = choices
@@ -102,6 +105,9 @@ def playerDataLoad(type="login"):
 def getActivePlayer(type="login"):
     """Retrieve the currently playing account from player_data.json."""
     playerData = openFile("player_data.json")
+    if not playerData:
+        dia("Account bank is empty!", Colors.RED)
+        return None
 
     activeUser = playerData.get("ACTIVE_PLAYER", False)
 
