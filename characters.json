@@ -1,0 +1,42 @@
+{
+    "Frontman": [
+        [
+            "So... you are the guy. Interesting...",
+            "Well... the plan is simple.",
+            "Let's get started...",
+            "What would you like to know?"
+        ],
+        {
+            "Plan 📜": [
+                "The PLAN: Break into the timeVault and obtain the lost Gem.",
+                "You will be given the essential tools and information you need to get in and out before the guards find out.",
+                "Do you have any questions?"
+            ],
+            "Who are you? 🤔": [
+                "Name: Unknown",
+                "Gender: Male",
+                "Age: 34",
+                "Profession: ???",
+                "All you need to know is that I have the answers you seek."
+            ],
+            "Tools ⛏️": [
+                "You will receive a toolkit containing:",
+                "- A grappling hook for scaling walls. ⚓",
+                "- A decoder to bypass security panels. 📔",
+                "- A stealth suit to avoid detection. 🦾",
+                "- A small blade to cut and remove obstacles 🔪 ",
+                "Use them wisely."
+            ],
+            "Risks 💀": [
+                "The timeVault is heavily guarded.",
+                "You must be quick and silent.",
+                "If you trigger an alarm, you have 30 seconds to escape before lockdown.",
+                "From our information, we know that guards patrol the area each for 15 mins, before switching shifts... each switch will give you a mere 30 seconds before the next guard takes their place."
+            ],
+            "Start Mission 🚀": [
+                "Very well then...",
+                "Wish you the best of luck..."
+            ]
+        }
+    ]
+}

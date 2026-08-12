@@ -34,8 +34,8 @@ def game_story(Choice):
 # ================================================ ACCOUNT FUNCTIONS ================================================
 def checkExistingAccount():
     PLAYER = None  # Initialize empty player object
-
-    if os.path.exists("player_data.json"):
+    playerData = openFile("player_data.json")
+    if playerData and isinstance(playerData, dict) and len(playerData) > 0:
         dia("Existing account(s) detected...", Colors.GREEN)
         dia("Do you want to continue your progress?", Colors.ORANGE)
         while True:
@@ -60,8 +60,7 @@ def checkExistingAccount():
                 break
             elif acc == "delete":
                 PLAYER = playerDataLoad("delete")
-                if PLAYER != "Exit":
-                    playerData = openFile("player_data.json")
+                if PLAYER and PLAYER != "Exit":
                     playerData.pop(PLAYER.username, None)
                     openFile("player_data.json", mode="w", dump=playerData)
                 continue
@@ -89,6 +88,10 @@ def checkExistingAccount():
                     continue
 
     else:
+        dia(
+            "No existing accounts found. Please create a new account...",
+            Colors.RED,
+        )
         PLAYER = newAccount()
         playerDataSave(PLAYER)
 
@@ -98,17 +101,21 @@ def checkExistingAccount():
 def newAccount():
 
     Choice = imput("NAME | GUEST:", ("name", "guest"))
+    Player_name = "null"
     if Choice == "name":
         while True:
             Player_name = (
                 input(dia("Enter your name:", Colors.YELLOW, "ask")).strip().title()
             )
+
             if Player_name:
                 break
             dia("Name cannot be blank!", Colors.RED)
 
     elif Choice == "guest":
         playerData = openFile("player_data.json")
+        if not playerData:
+            playerData = {}
         i = 0
         while True:
             Player_name = f"Guest_{i:04d}"  # Formats as Guest_0000, Guest_0001, etc.
@@ -121,6 +128,7 @@ def newAccount():
     game_story(Story)
 
     Choice = imput("ACCEPT | REFUSE | QUIT", ("accept", "refuse", "quit"))
+    PLAYER = None
     if Choice == "accept":
         PLAYER = PlayerSetup(Choice, Player_name)
     elif Choice == "refuse":
@@ -134,7 +142,7 @@ def newAccount():
 def handleOptions(options, mode="action"):
     # Make a temporary dict to hold the index and options.
     actionDict = {}
-
+    index = 0
     for index, choices in enumerate(options, start=1):
         dia(f"{index}. {choices}", Colors.LIGHT_BLUE)
         actionDict[str(index)] = choices
