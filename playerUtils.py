@@ -56,11 +56,8 @@ def playerDataLoad(type="login"):
     :return: A PlayerSetup object containing the chosen player's data.
     :rtype: PlayerSetup
     """
-    try:
-        playerData = openFile("player_data.json")
-    except (FileNotFoundError, json.JSONDecodeError):
-        dia("No accounts found!", Colors.RED)
-        return None
+
+    playerData = openFile("player_data.json")
 
     if not playerData:
         dia("No saved accounts found!", Colors.RED)
