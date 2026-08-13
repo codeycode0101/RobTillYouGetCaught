@@ -24,12 +24,18 @@ JSON file format:
 
 
 def Setup():
+    """
+    Initialize the game by loading the active player and setting up the location path.
+    @param None: No parameters are required for this function.
+    @return: The active player object.
+    """
     global PLAYER, lpath
     PLAYER = getActivePlayer()
     if PLAYER is None:
         dia("No active player found. Please restart the game.", Colors.RED)
         exit()
     lpath = Locations[PLAYER.PATH]  # l --> location, path --> path
+    return PLAYER
 
 
 def exitGame(Player):
@@ -119,9 +125,9 @@ def gameIntro():
 
 
 def gameLoop():
-    # cloc = Current Location
-    # locProps = Location's properties (desc, options)
-    # lpath = Location Path
+    # ? cloc = Current Location
+    # ! locProps = Location's properties (desc, options)
+    # * lpath = Location Path
 
     global cloc, player
     if PLAYER is None:
@@ -187,11 +193,7 @@ def main():
     The function does not return any value. It runs indefinitely until the player
     selects the option to start the mission.
     """
-    Setup()
-
-    if PLAYER is None:
-        dia("No active player found. Please restart the game.", Colors.RED)
-        exit()
+    PLAYER = Setup()
 
     if not PLAYER.progress:
         options = gameIntro()

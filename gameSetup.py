@@ -1,4 +1,5 @@
 import os, time, sys
+from unittest import case
 from playerObj import PlayerSetup
 from colors import Colors
 from dialouges import dia, imput
@@ -39,53 +40,51 @@ def checkExistingAccount():
         dia("Existing account(s) detected...", Colors.GREEN)
         dia("Do you want to continue your progress?", Colors.ORANGE)
         while True:
-            acc = imput(
+            accChoice = imput(
                 "LOAD | ADD | DELETE | START OVER",
                 ("load", "add", "delete", "start over"),
                 Colors.ORANGE,
             )
-
-            if acc == "load":
-                PLAYER = playerDataLoad()
-                if PLAYER == "Exit":
+            match accChoice:
+                case "load":
+                    PLAYER = playerDataLoad()
+                    if PLAYER != "Exit":
+                        playerDataSave(PLAYER)
+                        break
                     continue
-                else:
-                    playerDataSave(PLAYER)
-                    break
-
-            elif acc == "add":
-                dia("Adding a new account...", Colors.LIGHT_BLUE)
-                PLAYER = newAccount()
-                playerDataSave(PLAYER)  # Save without deleting others
-                break
-            elif acc == "delete":
-                PLAYER = playerDataLoad("delete")
-                if PLAYER and PLAYER != "Exit":
-                    playerData.pop(PLAYER.username, None)
-                    openFile("player_data.json", mode="w", dump=playerData)
-                continue
-
-            elif acc == "start over":
-                dia(
-                    "Starting fresh... All previous accounts will be erased.",
-                    Colors.RED,
-                )
-                confirmDeleteAcc = imput(
-                    "Do you confirm to proceed with permenant deletion of accounts? (Y/N)",
-                    ("y", "n"),
-                    Colors.RED,
-                )
-
-                if confirmDeleteAcc == "y":
-                    os.remove("player_data.json")  # Deletes existing accounts
-                    dia("Accounts removed...", Colors.RED)
-                    dia("Creating new accounts...", Colors.LIGHT_BLUE)
+                case "add":
+                    dia("Adding a new account...", Colors.LIGHT_BLUE)
                     PLAYER = newAccount()
-                    playerDataSave(PLAYER)
+                    playerDataSave(PLAYER)  # Save without deleting others
                     break
-                else:
-                    dia("Cancelling operation...", Colors.GREEN)
+                case "delete":
+                    PLAYER = playerDataLoad("delete")
+                    if PLAYER and PLAYER != "Exit":
+                        playerData.pop(PLAYER.username, None)
+                        openFile("player_data.json", mode="w", dump=playerData)
                     continue
+
+                case "start over":
+                    dia(
+                        "Starting fresh... All previous accounts will be erased.",
+                        Colors.RED,
+                    )
+                    confirmDeleteAcc = imput(
+                        "Do you confirm to proceed with permenant deletion of accounts? (Y/N)",
+                        ("y", "n"),
+                        Colors.RED,
+                    )
+
+                    if confirmDeleteAcc == "y":
+                        os.remove("player_data.json")  # Deletes existing accounts
+                        dia("Accounts removed...", Colors.RED)
+                        dia("Creating new accounts...", Colors.LIGHT_BLUE)
+                        PLAYER = newAccount()
+                        playerDataSave(PLAYER)
+                        break
+                    else:
+                        dia("Cancelling operation...", Colors.GREEN)
+                        continue
 
     else:
         dia(
