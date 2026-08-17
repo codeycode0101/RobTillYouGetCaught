@@ -7,7 +7,7 @@ def dia(
     msg,
     color=Colors.BLUE,
     type="print",
-    delay=0.03,
+    delay=0.003,
 ):
     for char in msg:
         sys.stdout.write(char if type == "speak" else color + char + Colors.RESET)

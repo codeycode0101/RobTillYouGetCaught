@@ -1,4 +1,4 @@
-import keyboard
+from convo import handleConvo
 from gameSetup import handleOptions, isHash
 from dialouges import charDia, dia, twoToned, imput, lineBreaker, update
 from playerUtils import getActivePlayer, playerDataSave
@@ -138,7 +138,7 @@ def gameLoop():
     while True:
 
         if isHash(cloc):
-            # Go into location for relevant desc and options
+            # Pull location's desc and options
             locProps = lpath.get(cloc, None)
 
         # Possible check for no key.
@@ -159,30 +159,35 @@ def gameLoop():
         dia(locProps["desc"])
         loptions = locProps["options"]
         # loptions = Location Options
-        option = handleOptions(loptions)
-
-        # option = (index, choice ⭐)
-        if option[-1] == "ADMIN":
+        # optionIndex, option = (index, choice ⭐)
+        optionIndex, option = handleOptions(loptions)
+        if option == "ADMIN":
             ADMIN()
             continue
-        elif option == "Exit":
+        elif option == "Exit Game":
             exitGame(PLAYER)
         else:
             # Save previous location
             prevLoc = cloc
-            # Find location of chosen option (OPTION: NEXT_LOCATION)
-            # Options = (Index, option 🔑)
-            cloc = loptions[option[-1]]
-            if isinstance(cloc, (list, tuple)):
-                # For item/person: cloc = ["Next Location", "mode"]
+            #  * Find location of chosen option (OPTION: NEXT_LOCATION)
+            cloc = loptions[option]
+
+            # ! Check if the chosen option is a special action (item/person)
+            if isinstance(cloc, tuple):
+                # * For item/person: cloc = ["itemName/personName", "mode"]
                 match cloc[-1]:
                     case "item":
                         update("Inventory Algorithm")
+                        dia("Returning to prevLoc...", Colors.RED)
+                        cloc = PLAYER.progress = prevLoc
                     case "person":
-                        update("Conversation Algorithm")
-                dia("Returning to prevLoc...", Colors.RED)
-                cloc = PLAYER.progress = prevLoc
-                continue
+                        options = handleConvo(cloc[0])
+                        if options is None:
+                            dia("Returning to prevLoc...", Colors.RED)
+                            cloc = PLAYER.progress = prevLoc
+                        else:
+                            print(options)
+                            input()
 
 
 def main():

@@ -139,6 +139,16 @@ def newAccount():
 
 # ================================================ EVENT HANDLER FUNCTIONS =============================================
 def handleOptions(options, mode="action"):
+    """
+    Reads the options dictionary and displays the available choices numbered from 1 to n to the player.
+    Prompts the player to select an option by entering the corresponding number.
+    Returns:
+    - If mode is "dialog": Displays the dialogue for the chosen option and returns tuple.
+    - If mode is "action": Returns a tuple.
+
+    - Tuple format: (index, choice) where index is the number of the option and choice is the key of the chosen option.
+    """
+
     # Make a temporary dict to hold the index and options.
     actionDict = {}
     index = 0
@@ -155,10 +165,8 @@ def handleOptions(options, mode="action"):
 
     # Prompt for input and get the chosen key
     optionIndex = imput("Option:", actionDict)
-    if optionIndex == str(index):
-        return "Exit"
-
     optionChoice = actionDict[optionIndex]
+
     if mode == "dialog":
         # Display the dialogue for the chosen option
         for optionDesc in options[optionChoice]:
