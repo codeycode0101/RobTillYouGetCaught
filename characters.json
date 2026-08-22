@@ -63,6 +63,9 @@
           "There are many hidden spots and secrets to discover.",
           "TODO: Add more things"
         ]
+      },
+      "Exit Conversation": {
+        "dialouges": "Alright, it was nice talking with you! Bye!"
       }
     }
   }

@@ -98,7 +98,6 @@ def checkExistingAccount():
 
 
 def newAccount():
-
     Choice = imput("NAME | GUEST:", ("name", "guest"))
     Player_name = "null"
     if Choice == "name":
@@ -152,13 +151,17 @@ def handleOptions(options, mode="action"):
     # Make a temporary dict to hold the index and options.
     actionDict = {}
     index = 0
+    if mode == "npc":
+        dia("You:", Colors.PINK)
+
     for index, choices in enumerate(options, start=1):
         dia(f"{index}. {choices}", Colors.LIGHT_BLUE)
         actionDict[str(index)] = choices
     # Add an exit option
     index += 1
-    actionDict[str(index)] = "Exit Game"
-    dia(f"{str(index)}. Exit Game 📤", Colors.RED)
+    exitMsg = "Exit Conversation" if mode == "npc" else "Exit Game"
+    actionDict[str(index)] = exitMsg
+    dia(f"{str(index)}. {exitMsg} 📤", Colors.RED)
 
     # Add hidden administrator option
     actionDict["admin()"] = "ADMIN"
@@ -171,8 +174,10 @@ def handleOptions(options, mode="action"):
         # Display the dialogue for the chosen option
         for optionDesc in options[optionChoice]:
             dia(optionDesc)
-
-    # Return the index and choice so the caller knows which option was chosen
+    if mode == "npc":
+        # Return next Scene's key.
+        return options.get(optionChoice, None)
+        # Return the index and choice so the caller knows which option was chosen
     return (optionIndex, optionChoice)
 
 

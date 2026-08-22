@@ -179,15 +179,9 @@ def gameLoop():
                     case "item":
                         update("Inventory Algorithm")
                         dia("Returning to prevLoc...", Colors.RED)
-                        cloc = PLAYER.progress = prevLoc
                     case "person":
-                        options = handleConvo(cloc[0])
-                        if options is None:
-                            dia("Returning to prevLoc...", Colors.RED)
-                            cloc = PLAYER.progress = prevLoc
-                        else:
-                            print(options)
-                            input()
+                        handleConvo(cloc[0])
+                cloc = PLAYER.progress = prevLoc
 
 
 def main():
