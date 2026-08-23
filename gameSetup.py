@@ -176,7 +176,7 @@ def handleOptions(options, mode="action"):
             dia(optionDesc)
     if mode == "npc":
         # Return next Scene's key.
-        return options.get(optionChoice, None)
+        return options.get(optionChoice, optionChoice)
         # Return the index and choice so the caller knows which option was chosen
     return (optionIndex, optionChoice)
 

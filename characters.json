@@ -41,7 +41,7 @@
       "introduction": {
         "dialouges": [
           "Hey there buddy! You look new around here.",
-          "I am Sam, the local here. I know a lot about this place."
+          "I'm Sam, the local here. I know a lot about this place."
         ],
         "options": {
           "What do you do?": "job_info",
@@ -65,7 +65,7 @@
         ]
       },
       "Exit Conversation": {
-        "dialouges": "Alright, it was nice talking with you! Bye!"
+        "dialouges": ["Alright, it was nice talking with you! Bye!"]
       }
     }
   }

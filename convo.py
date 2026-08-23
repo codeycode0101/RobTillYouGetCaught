@@ -29,17 +29,16 @@ def handleConvo(npc):
         # * Conversation loop
         while True:
             dia(f"Next Scene Key: {branch}")
-            # ? cBranch = Current branch
-            cBranch = pBranches.get(branch, None)
-            if cBranch:
-                diaBranch = cBranch.get("dialouges", [])
+            branchMetaData = pBranches.get(branch, None)
+            if branchMetaData:
+                diaBranch = branchMetaData.get("dialouges", [])
                 for dialogue in diaBranch:
                     twoToned(npc, dialogue)
-                if cBranch == "Exit Conversation":
+                if branch == "Exit Conversation":
                     return
             else:
                 update(
                     f"Dialouges for this path hasn't been added yet. Please wait for the next update ^^"
                 )
                 return
-            branch = handleOptions(cBranch.get("options", {}), "npc")
+            branch = handleOptions(branchMetaData.get("options", {}), "npc")
