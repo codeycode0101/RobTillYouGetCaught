@@ -1,4 +1,5 @@
 import os, time, sys
+from unittest import case
 from playerObj import PlayerSetup
 from colors import Colors
 from dialouges import dia, imput
@@ -39,53 +40,51 @@ def checkExistingAccount():
         dia("Existing account(s) detected...", Colors.GREEN)
         dia("Do you want to continue your progress?", Colors.ORANGE)
         while True:
-            acc = imput(
+            accChoice = imput(
                 "LOAD | ADD | DELETE | START OVER",
                 ("load", "add", "delete", "start over"),
                 Colors.ORANGE,
             )
-
-            if acc == "load":
-                PLAYER = playerDataLoad()
-                if PLAYER == "Exit":
+            match accChoice:
+                case "load":
+                    PLAYER = playerDataLoad()
+                    if PLAYER != "Exit":
+                        playerDataSave(PLAYER)
+                        break
                     continue
-                else:
-                    playerDataSave(PLAYER)
-                    break
-
-            elif acc == "add":
-                dia("Adding a new account...", Colors.LIGHT_BLUE)
-                PLAYER = newAccount()
-                playerDataSave(PLAYER)  # Save without deleting others
-                break
-            elif acc == "delete":
-                PLAYER = playerDataLoad("delete")
-                if PLAYER and PLAYER != "Exit":
-                    playerData.pop(PLAYER.username, None)
-                    openFile("player_data.json", mode="w", dump=playerData)
-                continue
-
-            elif acc == "start over":
-                dia(
-                    "Starting fresh... All previous accounts will be erased.",
-                    Colors.RED,
-                )
-                confirmDeleteAcc = imput(
-                    "Do you confirm to proceed with permenant deletion of accounts? (Y/N)",
-                    ("y", "n"),
-                    Colors.RED,
-                )
-
-                if confirmDeleteAcc == "y":
-                    os.remove("player_data.json")  # Deletes existing accounts
-                    dia("Accounts removed...", Colors.RED)
-                    dia("Creating new accounts...", Colors.LIGHT_BLUE)
+                case "add":
+                    dia("Adding a new account...", Colors.LIGHT_BLUE)
                     PLAYER = newAccount()
-                    playerDataSave(PLAYER)
+                    playerDataSave(PLAYER)  # Save without deleting others
                     break
-                else:
-                    dia("Cancelling operation...", Colors.GREEN)
+                case "delete":
+                    PLAYER = playerDataLoad("delete")
+                    if PLAYER and PLAYER != "Exit":
+                        playerData.pop(PLAYER.username, None)
+                        openFile("player_data.json", mode="w", dump=playerData)
                     continue
+
+                case "start over":
+                    dia(
+                        "Starting fresh... All previous accounts will be erased.",
+                        Colors.RED,
+                    )
+                    confirmDeleteAcc = imput(
+                        "Do you confirm to proceed with permenant deletion of accounts? (Y/N)",
+                        ("y", "n"),
+                        Colors.RED,
+                    )
+
+                    if confirmDeleteAcc == "y":
+                        os.remove("player_data.json")  # Deletes existing accounts
+                        dia("Accounts removed...", Colors.RED)
+                        dia("Creating new accounts...", Colors.LIGHT_BLUE)
+                        PLAYER = newAccount()
+                        playerDataSave(PLAYER)
+                        break
+                    else:
+                        dia("Cancelling operation...", Colors.GREEN)
+                        continue
 
     else:
         dia(
@@ -99,7 +98,6 @@ def checkExistingAccount():
 
 
 def newAccount():
-
     Choice = imput("NAME | GUEST:", ("name", "guest"))
     Player_name = "null"
     if Choice == "name":
@@ -140,32 +138,46 @@ def newAccount():
 
 # ================================================ EVENT HANDLER FUNCTIONS =============================================
 def handleOptions(options, mode="action"):
+    """
+    Reads the options dictionary and displays the available choices numbered from 1 to n to the player.
+    Prompts the player to select an option by entering the corresponding number.
+    Returns:
+    - If mode is "dialog": Displays the dialogue for the chosen option and returns tuple.
+    - If mode is "action": Returns a tuple.
+
+    - Tuple format: (index, choice) where index is the number of the option and choice is the key of the chosen option.
+    """
+
     # Make a temporary dict to hold the index and options.
     actionDict = {}
     index = 0
+    if mode == "npc":
+        dia("You:", Colors.PINK)
+
     for index, choices in enumerate(options, start=1):
         dia(f"{index}. {choices}", Colors.LIGHT_BLUE)
         actionDict[str(index)] = choices
     # Add an exit option
     index += 1
-    actionDict[str(index)] = "Exit Game"
-    dia(f"{str(index)}. Exit Game 📤", Colors.RED)
+    exitMsg = "Exit Conversation" if mode == "npc" else "Exit Game"
+    actionDict[str(index)] = exitMsg
+    dia(f"{str(index)}. {exitMsg} 📤", Colors.RED)
 
     # Add hidden administrator option
     actionDict["admin()"] = "ADMIN"
 
     # Prompt for input and get the chosen key
     optionIndex = imput("Option:", actionDict)
-    if optionIndex == str(index):
-        return "Exit"
-
     optionChoice = actionDict[optionIndex]
+
     if mode == "dialog":
         # Display the dialogue for the chosen option
         for optionDesc in options[optionChoice]:
             dia(optionDesc)
-
-    # Return the index and choice so the caller knows which option was chosen
+    if mode == "npc":
+        # Return next Scene's key.
+        return options.get(optionChoice, optionChoice)
+        # Return the index and choice so the caller knows which option was chosen
     return (optionIndex, optionChoice)
 
 

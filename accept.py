@@ -1,4 +1,4 @@
-import keyboard
+from convo import handleConvo
 from gameSetup import handleOptions, isHash
 from dialouges import charDia, dia, twoToned, imput, lineBreaker, update
 from playerUtils import getActivePlayer, playerDataSave
@@ -24,12 +24,18 @@ JSON file format:
 
 
 def Setup():
+    """
+    Initialize the game by loading the active player and setting up the location path.
+    @param None: No parameters are required for this function.
+    @return: The active player object.
+    """
     global PLAYER, lpath
     PLAYER = getActivePlayer()
     if PLAYER is None:
         dia("No active player found. Please restart the game.", Colors.RED)
         exit()
     lpath = Locations[PLAYER.PATH]  # l --> location, path --> path
+    return PLAYER
 
 
 def exitGame(Player):
@@ -119,9 +125,9 @@ def gameIntro():
 
 
 def gameLoop():
-    # cloc = Current Location
-    # locProps = Location's properties (desc, options)
-    # lpath = Location Path
+    # ? cloc = Current Location
+    # ! locProps = Location's properties (desc, options)
+    # * lpath = Location Path
 
     global cloc, player
     if PLAYER is None:
@@ -132,7 +138,7 @@ def gameLoop():
     while True:
 
         if isHash(cloc):
-            # Go into location for relevant desc and options
+            # Pull location's desc and options
             locProps = lpath.get(cloc, None)
 
         # Possible check for no key.
@@ -153,30 +159,29 @@ def gameLoop():
         dia(locProps["desc"])
         loptions = locProps["options"]
         # loptions = Location Options
-        option = handleOptions(loptions)
-
-        # option = (index, choice ⭐)
-        if option[-1] == "ADMIN":
+        # optionIndex, option = (index, choice ⭐)
+        optionIndex, option = handleOptions(loptions)
+        if option == "ADMIN":
             ADMIN()
             continue
-        elif option == "Exit":
+        elif option == "Exit Game":
             exitGame(PLAYER)
         else:
             # Save previous location
             prevLoc = cloc
-            # Find location of chosen option (OPTION: NEXT_LOCATION)
-            # Options = (Index, option 🔑)
-            cloc = loptions[option[-1]]
-            if isinstance(cloc, (list, tuple)):
-                # For item/person: cloc = ["Next Location", "mode"]
+            #  * Find location of chosen option (OPTION: NEXT_LOCATION)
+            cloc = loptions[option]
+
+            # ! Check if the chosen option is a special action (item/person)
+            if isinstance(cloc, tuple):
+                # * For item/person: cloc = ["itemName/personName", "mode"]
                 match cloc[-1]:
                     case "item":
                         update("Inventory Algorithm")
+                        dia("Returning to prevLoc...", Colors.RED)
                     case "person":
-                        update("Conversation Algorithm")
-                dia("Returning to prevLoc...", Colors.RED)
+                        handleConvo(cloc[0])
                 cloc = PLAYER.progress = prevLoc
-                continue
 
 
 def main():
@@ -187,11 +192,7 @@ def main():
     The function does not return any value. It runs indefinitely until the player
     selects the option to start the mission.
     """
-    Setup()
-
-    if PLAYER is None:
-        dia("No active player found. Please restart the game.", Colors.RED)
-        exit()
+    PLAYER = Setup()
 
     if not PLAYER.progress:
         options = gameIntro()

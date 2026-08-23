@@ -41,7 +41,7 @@ def playerDataSave(PLAYER, state="join"):
     openFile("player_data.json", "w", dump=playerData)
 
 
-def playerDataLoad(type="login"):
+def playerDataLoad(Type="login"):
     """
     Load an account from the JSON file and let the player choose.
 
@@ -80,13 +80,15 @@ def playerDataLoad(type="login"):
     dia(f"{str(index)}. Exit 📤", Colors.RED)
 
     choiceIndex = imput("Choose an account: ", playersDict)
+
     if choiceIndex == str(index):
         return "Exit"
     else:
         chosenUser = choices[int(choiceIndex) - 1]
-    if type == "login":
+
+    if Type == "login":
         dia(f"Welcome back, {chosenUser}!", Colors.GREEN)
-    elif type == "delete":
+    elif Type == "delete":
         dia("Account sucessfully deleted!", Colors.GREEN)
 
     return PlayerSetup(

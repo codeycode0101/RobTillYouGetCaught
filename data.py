@@ -36,8 +36,8 @@ Locations = {
             "desc": "You arrived at quarters and you meet two roommates. Their names are Sam and Veronica...",
             "options": {
                 "Stay at quarters": "quarterBed",
-                "Talk to Sam": ["Sam", "person"],  # TODO: CONVO
-                "Talk to Veronica": ["Veronica", "person"],  # TODO: CONVO
+                "Talk to Sam": ("Sam", "person"),  # TODO: CONVO
+                "Talk to Veronica": ("Veronica", "person"),  # TODO: CONVO
                 "Go outside to base": "Base",
             },
         },
@@ -48,11 +48,11 @@ Locations = {
                     {"Bomb", "collect"},
                     "item",
                 ],  # TODO: ITEM COLLECTION
-                "Talk to Sam about the bomb": ["Sam", "person"],  # TODO: CONVO
-                "Talk to Veronica about the bomb": [
+                "Talk to Sam about the bomb": ("Sam", "person"),  # TODO: CONVO
+                "Talk to Veronica about the bomb": (
                     "Veronica",
                     "person",
-                ],  # TODO: CONVO
+                ),  # TODO: CONVO
                 "Go outside to base": "Base",
             },
         },
@@ -95,7 +95,7 @@ Locations = {
             "desc": "You are on a ship... The ship is filled with a variety of junk and items... it took off and swayed dangerously on the rough seas, wind shook the sails and blew through the seven seas...",
             "options": {
                 "Explore ship": "shipPlaces",
-                "Talk to captain": ["Captain", "person"],  # TODO: CONVO
+                "Talk to captain": ("Captain", "person"),  # TODO: CONVO
             },
         },
         "shipPlaces": {
