@@ -36,23 +36,20 @@ Locations = {
             "desc": "You arrived at quarters and you meet two roommates. Their names are Sam and Veronica...",
             "options": {
                 "Stay at quarters": "quarterBed",
-                "Talk to Sam": ("Sam", "person"),  # TODO: CONVO
-                "Talk to Veronica": ("Veronica", "person"),  # TODO: CONVO
+                "Talk to Sam": ("Sam", "person"),
+                "Talk to Veronica": ("Veronica", "person"),
                 "Go outside to base": "Base",
             },
         },
         "quarterBed": {
             "desc": "You lied down on the bed... thump! You felt something hard lying down your back.. opening up the covers you find a sticky bomb hidden underneath...",
             "options": {
-                "Steal the bomb": [
-                    {"Bomb", "collect"},
+                "Steal the bomb": (
+                    {"Bomb": "collect"},
                     "item",
-                ],  # TODO: ITEM COLLECTION
-                "Talk to Sam about the bomb": ("Sam", "person"),  # TODO: CONVO
-                "Talk to Veronica about the bomb": (
-                    "Veronica",
-                    "person",
-                ),  # TODO: CONVO
+                ),  # TODO: Add item handling
+                "Talk to Sam about the bomb": ("Sam", "person"),
+                "Talk to Veronica about the bomb": ("Veronica", "person"),
                 "Go outside to base": "Base",
             },
         },

@@ -28,7 +28,6 @@ def handleConvo(npc):
         branch = handleOptions(intro.get("options", {}), "npc")
         # * Conversation loop
         while True:
-            dia(f"Next Scene Key: {branch}")
             branchMetaData = pBranches.get(branch, None)
             if branchMetaData:
                 diaBranch = branchMetaData.get("dialouges", [])

@@ -68,5 +68,69 @@
         "dialouges": ["Alright, it was nice talking with you! Bye!"]
       }
     }
+  },
+  "Veronica": {
+    "branches": {
+      "introduction": {
+        "dialouges": [
+          "Hello there! You seem like someone who enjoys a good challenge.",
+          "I'm Veronica, a treasure hunter and adventurer."
+        ],
+        "options": {
+          "What kind of challenges do you face?": "challenge_info",
+          "Tell me about your adventures.": "adventure_info"
+        }
+      },
+      "challenge_info": {
+        "dialouges": [
+          "I often explore ancient ruins and hidden temples.",
+          "The challenges I face include solving puzzles, avoiding traps, and battling guardians."
+        ],
+        "options": {
+          "Tell me about your adventures.": "adventure_info"
+        }
+      },
+      "adventure_info": {
+        "dialouges": [
+          "I've traveled to many exotic locations in search of lost treasures.",
+          "Each adventure is unique and filled with excitement and danger."
+        ]
+      },
+      "Exit Conversation": {
+        "dialouges": ["It was great chatting with you! Safe travels!"]
+      }
+    }
+  },
+  "Captain": {
+    "branches": {
+      "introduction": {
+        "dialouges": [
+          "Ahoy there! You look like someone ready for an adventure.",
+          "I'm the Captain of this ship, and I know the seas like the back of my hand."
+        ],
+        "options": {
+          "What kind of adventures do you have?": "adventure_info",
+          "Tell me about the ship.": "ship_info"
+        }
+      },
+      "adventure_info": {
+        "dialouges": [
+          "We sail to distant lands in search of treasures and new discoveries.",
+          "The adventures are filled with challenges, from battling storms to facing pirates."
+        ],
+        "options": {
+          "Tell me about the ship.": "ship_info"
+        }
+      },
+      "ship_info": {
+        "dialouges": [
+          "This ship is equipped with the latest navigation tools and safety equipment.",
+          "It's built for speed and durability, perfect for long voyages."
+        ]
+      },
+      "Exit Conversation": {
+        "dialouges": ["Fair winds and following seas!"]
+      }
+    }
   }
 }
